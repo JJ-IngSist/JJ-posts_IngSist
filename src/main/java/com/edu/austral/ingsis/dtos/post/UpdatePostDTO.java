@@ -1,4 +1,4 @@
-package com.edu.austral.ingsis.dtos;
+package com.edu.austral.ingsis.dtos.post;
 
 public class UpdatePostDTO {
 

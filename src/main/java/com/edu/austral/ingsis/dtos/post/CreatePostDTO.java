@@ -1,9 +1,10 @@
-package com.edu.austral.ingsis.dtos;
+package com.edu.austral.ingsis.dtos.post;
 
 public class CreatePostDTO {
 
   private String text;
   private Long userId;
+  private Long threadId;
 
   public String getText() {
     return text;
@@ -19,5 +20,13 @@ public class CreatePostDTO {
 
   public void setUserId(Long userId) {
     this.userId = userId;
+  }
+
+  public Long getThreadId() {
+    return threadId;
+  }
+
+  public void setThreadId(Long threadId) {
+    this.threadId = threadId;
   }
 }
