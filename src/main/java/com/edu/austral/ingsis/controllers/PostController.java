@@ -20,6 +20,7 @@ import static com.edu.austral.ingsis.utils.ConnectMicroservices.getFromJson;
 import static com.edu.austral.ingsis.utils.ConnectMicroservices.getRequestEntity;
 
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT})
 public class PostController {
 
   private final ObjectMapper objectMapper;
