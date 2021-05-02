@@ -35,9 +35,17 @@ public class ThreadService {
     return threadRepository.findAll();
   }
 
+  public List<Thread> getAllThatContainUserPost(Long id) {
+    return threadRepository.getAllThatContainUserPost(id);
+  }
+
+  public Thread getByPostId(Long id) {
+    return threadRepository.getByPostId(id);
+  }
+
   public void deletePost(Post post) {
     Thread thread = threadRepository.findThreadOfPostById(post.getId());
-    thread.setPosts(thread.getPosts().stream().filter(t -> t.getId().equals(post.getId())).collect(Collectors.toList()));
+    thread.setPosts(thread.getPosts().stream().filter(t -> !t.getId().equals(post.getId())).collect(Collectors.toList()));
     save(thread);
   }
 }

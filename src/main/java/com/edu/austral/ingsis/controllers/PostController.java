@@ -6,6 +6,7 @@ import com.edu.austral.ingsis.dtos.post.PostDTO;
 import com.edu.austral.ingsis.entities.Post;
 import com.edu.austral.ingsis.services.PostService;
 import com.edu.austral.ingsis.utils.NotFoundException;
+import com.edu.austral.ingsis.utils.ObjectMapper;
 import com.edu.austral.ingsis.utils.ObjectMapperImpl;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ import static com.edu.austral.ingsis.utils.ConnectMicroservices.getRequestEntity
 @RestController
 public class PostController {
 
-  private final com.edu.austral.ingsis.utils.ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
   private final PostService postService;
   private final RestTemplate restTemplate;
 
@@ -53,6 +54,18 @@ public class PostController {
   public ResponseEntity<List<PostDTO>> getPosts() {
     final List<Post> posts = postService.getAll();
     return ResponseEntity.ok(objectMapper.map(posts, PostDTO.class));
+  }
+
+  @PostMapping("/post/like/{id}")
+  public ResponseEntity<PostDTO> likePost(@PathVariable Long id) {
+    final Post post = postService.likePost(id);
+    return ResponseEntity.ok(objectMapper.map(post, PostDTO.class));
+  }
+
+  @PostMapping("/post/dislike/{id}")
+  public ResponseEntity<PostDTO> dislikePost(@PathVariable Long id) {
+    final Post post = postService.dislikePost(id);
+    return ResponseEntity.ok(objectMapper.map(post, PostDTO.class));
   }
 
   @PutMapping("/{id}")

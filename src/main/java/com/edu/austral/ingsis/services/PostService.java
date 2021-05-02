@@ -22,6 +22,7 @@ public class PostService {
 
   public Post create(Post post, Long threadId) {
     post.setDate(LocalDate.now());
+    post.setLikes(0);
     Post saved = postRepository.save(post);
     if (threadId != 0) {
       Thread thread = threadService.getById(threadId);
@@ -36,6 +37,26 @@ public class PostService {
 
   public Post getById(Long id) {
     return postRepository.findById(id).orElseThrow(NotFoundException::new);
+  }
+
+  public List<Post> getPostsOfUser(Long id) {
+    return postRepository.getPostsOfUser(id);
+  }
+
+  public Post likePost(Long id) {
+    Post post = getById(id);
+    post.setLikes(post.getLikes() + 1);
+    return save(post);
+  }
+
+  public Post dislikePost(Long id) {
+    Post post = getById(id);
+    post.setLikes(post.getLikes() - 1);
+    return save(post);
+  }
+
+  public List<Post> getMostLiked(int size) {
+    return postRepository.getMostLiked(size);
   }
 
   public Post update(Long id, Post post) {

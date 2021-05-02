@@ -15,6 +15,12 @@ public interface PostRepository extends CrudRepository<Post, Long> {
 
   List<Post> findAll();
 
-  @Query(value = "select * from post p where p.id in (select tp.post_id from thread_post tp where tp.thread_id = ?1)", nativeQuery = true)
+  @Query(value = "select * from posts p where p.id in (select tp.post_id from thread_post tp where tp.thread_id = ?1)", nativeQuery = true)
   List<Post> findAllByThread(Long id);
+
+  @Query(value = "select * from posts p where p.user_id = ?1", nativeQuery = true)
+  List<Post> getPostsOfUser(Long id);
+
+  @Query(value = "select * from posts p order by p.likes desc limit ?1", nativeQuery = true)
+  List<Post> getMostLiked(int size);
 }

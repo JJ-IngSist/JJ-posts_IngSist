@@ -9,6 +9,7 @@ public class PostDTO {
   private Long userId;
   private Long threadId;
   private LocalDate date;
+  private int likes;
 
   public Long getId() {
     return id;
@@ -48,5 +49,13 @@ public class PostDTO {
 
   public void setDate(LocalDate date) {
     this.date = date;
+  }
+
+  public int getLikes() {
+    return likes;
+  }
+
+  public void setLikes(int likes) {
+    this.likes = likes;
   }
 }

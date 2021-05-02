@@ -8,16 +8,15 @@ import org.springframework.http.MediaType;
 
 public class ConnectMicroservices {
 
-
   public static HttpEntity<Object> getRequestEntity() {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     return new HttpEntity<>(headers);
   }
 
-  public static String getFromJson(String user, String property) {
+  public static String getFromJson(String json, String property) {
     try {
-      JSONObject fieldsJson = new JSONObject(user);
+      JSONObject fieldsJson = new JSONObject(json);
       return fieldsJson.getString(property);
     } catch (JSONException e) {
       e.printStackTrace();

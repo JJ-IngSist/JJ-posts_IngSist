@@ -10,20 +10,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-public class ThreadController {
+public class HomeController {
 
-  private final ThreadService threadService;
   private final ObjectMapper objectMapper;
+  private final ThreadService threadService;
 
-  public ThreadController(ThreadService threadService) {
+  public HomeController(ThreadService threadService) {
     this.threadService = threadService;
     this.objectMapper = new ObjectMapperImpl();
   }
 
-  @GetMapping("/post/{id}/thread")
-  public ResponseEntity<ThreadDTO> getThreadOfPost(@PathVariable Long id) {
-    final Thread thread = threadService.getByPostId(id);
-    return ResponseEntity.ok(objectMapper.map(thread, ThreadDTO.class));
+  @GetMapping("/threads/{id}")
+  public ResponseEntity<List<ThreadDTO>> getThread(@PathVariable Long id) {
+    final List<Thread> threads = threadService.getAllThatContainUserPost(id);
+    return ResponseEntity.ok(objectMapper.map(threads, ThreadDTO.class));
   }
 }
