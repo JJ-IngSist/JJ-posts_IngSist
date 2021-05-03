@@ -12,12 +12,12 @@ public interface ThreadRepository extends CrudRepository<Thread, Long> {
 
   List<Thread> findAll();
 
-  @Query(value = "select * from thread t where t.id in (select tp.thread_id from thread_post tp where tp.post_id = ?1)", nativeQuery = true)
+  @Query(value = "select * from threads t where t.id in (select tp.thread_id from threads_posts tp where tp.posts_id = ?1)", nativeQuery = true)
   Thread findThreadOfPostById(Long id);
 
-  @Query(value = "select * from thread t where t.id in (select tp.thread_id from thread_post tp where tp.post_id in (select p.id from post p where p.user_id = ?1))", nativeQuery = true)
+  @Query(value = "select * from threads t where t.id in (select tp.thread_id from threads_posts tp where tp.posts_id in (select p.id from posts p where p.user_id = ?1))", nativeQuery = true)
   List<Thread> getAllThatContainUserPost(Long id);
 
-  @Query(value = "select * from thread t where t.id in (select tp.thread_id from thread_post tp where tp.post_id = ?1)", nativeQuery = true)
+  @Query(value = "select * from threads t where t.id in (select tp.thread_id from threads_posts tp where tp.posts_id = ?1)", nativeQuery = true)
   Thread getByPostId(Long id);
 }
