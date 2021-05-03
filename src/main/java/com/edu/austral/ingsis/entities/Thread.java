@@ -13,8 +13,11 @@ public class Thread {
   @Column(name = "id")
   private Long id;
 
-  @OneToMany(orphanRemoval = true)
+  @OneToMany
   private List<Post> posts = new ArrayList<>();
+
+  @Column(name = "first_id")
+  private Long firstPostId;
 
   public Long getId() {
     return id;
@@ -30,5 +33,13 @@ public class Thread {
 
   public void setPosts(List<Post> posts) {
     this.posts = posts;
+  }
+
+  public Long getFirstPostId() {
+    return firstPostId;
+  }
+
+  public void setFirstPostId(Long firstPostId) {
+    this.firstPostId = firstPostId;
   }
 }

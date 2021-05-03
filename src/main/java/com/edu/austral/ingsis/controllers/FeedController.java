@@ -35,7 +35,7 @@ public class FeedController {
     final List<Post> posts = postService.getMostLiked(size);
     List<PostDTO> updatedPostDTOS = new ArrayList<>();
     for(PostDTO dto : objectMapper.map(posts, PostDTO.class)) {
-      updatedPostDTOS.add(setThreadId(setUserDetails(getFromUserMicroservice("/user/" + dto.getUserId()), dto)));
+      updatedPostDTOS.add(setThreadId(setUserDetails(getFromUserMicroservice("/user/" + dto.getUser()), dto)));
     }
     return ResponseEntity.ok(updatedPostDTOS);
   }

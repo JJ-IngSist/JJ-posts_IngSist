@@ -33,18 +33,18 @@ public class PostController {
     this.objectMapper = new ObjectMapperImpl();
   }
 
-  @PostMapping("/create")
+  @PostMapping("/post")
   public ResponseEntity<PostDTO> createPost(@RequestBody @Valid CreatePostDTO createPostDTO) {
     final String user = getFromUserMicroservice("/user/logged");
-    createPostDTO.setUserId(Long.valueOf(getFromJson(user, "id")));
-    final Post post = postService.create(objectMapper.map(createPostDTO, Post.class), createPostDTO.getThreadId());
+    createPostDTO.setUser(Long.valueOf(getFromJson(user, "id")));
+    final Post post = postService.create(objectMapper.map(createPostDTO, Post.class), createPostDTO.getThread());
     return ResponseEntity.ok(setThreadId(setUserDetails(user, objectMapper.map(post, PostDTO.class))));
   }
 
   @GetMapping("/post/{id}")
   public ResponseEntity<PostDTO> getPost(@PathVariable Long id) {
     final Post post = postService.getById(id);
-    final String user = getFromUserMicroservice("/user/" + post.getUserId());
+    final String user = getFromUserMicroservice("/user/" + post.getUser());
     PostDTO postDTO = setUserDetails(user, objectMapper.map(post, PostDTO.class));
     return ResponseEntity.ok(setThreadId(postDTO));
   }
@@ -54,7 +54,7 @@ public class PostController {
     final List<Post> posts = postService.getAll();
     List<PostDTO> updatedPostDTOS = new ArrayList<>();
     for(PostDTO dto : objectMapper.map(posts, PostDTO.class)) {
-      updatedPostDTOS.add(setThreadId(setUserDetails(getFromUserMicroservice("/user/" + dto.getUserId()), dto)));
+      updatedPostDTOS.add(setThreadId(setUserDetails(getFromUserMicroservice("/user/" + dto.getUser()), dto)));
     }
     return ResponseEntity.ok(updatedPostDTOS);
   }
@@ -83,8 +83,8 @@ public class PostController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<PostDTO> updatePost(@PathVariable Long id) {
-    postService.delete(postService.getById(id));
+  public ResponseEntity<PostDTO> deletePost(@PathVariable Long id) {
+    postService.deletePostWithThread(postService.getById(id));
     return ResponseEntity.noContent().build();
   }
 

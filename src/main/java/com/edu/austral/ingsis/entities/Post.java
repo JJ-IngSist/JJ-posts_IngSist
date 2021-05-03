@@ -16,7 +16,7 @@ public class Post {
   private String text;
 
   @Column(name = "user_id", nullable = false)
-  private Long userId;
+  private Long user;
 
   @Column(name = "date", nullable = false)
   private LocalDate date;
@@ -32,12 +32,12 @@ public class Post {
     this.text = text;
   }
 
-  public Long getUserId() {
-    return userId;
+  public Long getUser() {
+    return user;
   }
 
-  public void setUserId(Long userId) {
-    this.userId = userId;
+  public void setUser(Long user) {
+    this.user = user;
   }
 
   public Long getId() {

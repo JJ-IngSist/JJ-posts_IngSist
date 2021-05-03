@@ -7,6 +7,7 @@ import com.edu.austral.ingsis.utils.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,10 +25,10 @@ public class PostService {
     post.setDate(LocalDate.now());
     post.setLikes(0);
     Post saved = postRepository.save(post);
-    if (threadId != 0) {
-      Thread thread = threadService.getById(threadId);
-      threadService.addPost(thread, saved);
-    }
+    Thread thread;
+    if (threadId != 0) thread = threadService.getById(threadId);
+    else thread = new Thread();
+    threadService.addPost(thread, saved);
     return saved;
   }
 
@@ -41,6 +42,10 @@ public class PostService {
 
   public List<Post> getPostsOfUser(Long id) {
     return postRepository.getPostsOfUser(id);
+  }
+
+  public List<Post> getAll() {
+    return postRepository.findAll();
   }
 
   public Post likePost(Long id) {
@@ -64,18 +69,28 @@ public class PostService {
             .findById(id)
             .map(old -> {
               old.setText(post.getText());
-              old.setUserId(post.getUserId());
+              old.setUser(post.getUser());
               return save(old);
             })
             .orElseThrow(NotFoundException::new);
   }
 
-  public void delete(Post post) {
-    threadService.deletePost(post);
-    postRepository.delete(getById(post.getId()));
+  public void deletePostWithThread(Post post) {
+    Thread thread = threadService.getByPostId(post.getId());
+    if(post.getId().equals(thread.getFirstPostId())) {
+      thread.setPosts(new ArrayList<>());
+      threadService.save(thread);
+      deleteAllPosts(thread);
+      threadService.delete(thread);
+    } else {
+      threadService.deletePost(post);
+      postRepository.delete(getById(post.getId()));
+    }
   }
 
-  public List<Post> getAll() {
-    return postRepository.findAll();
+  private void deleteAllPosts(Thread thread) {
+    for(Post post: thread.getPosts()) {
+      postRepository.delete(getById(post.getId()));
+    }
   }
 }

@@ -8,6 +8,7 @@ public class ThreadDTO {
 
   private Long id;
   private List<Post> posts;
+  private Long firstPostId;
 
   public Long getId() {
     return id;
@@ -23,5 +24,13 @@ public class ThreadDTO {
 
   public void setPosts(List<Post> posts) {
     this.posts = posts;
+  }
+
+  public Long getFirstPostId() {
+    return firstPostId;
+  }
+
+  public void setFirstPostId(Long firstPostId) {
+    this.firstPostId = firstPostId;
   }
 }

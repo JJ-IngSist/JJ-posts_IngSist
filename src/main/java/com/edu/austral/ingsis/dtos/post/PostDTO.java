@@ -6,7 +6,7 @@ public class PostDTO {
 
   private Long id;
   private String text;
-  private Long userId;
+  private Long user;
   private String name;
   private String lastname;
   private String username;
@@ -23,8 +23,8 @@ public class PostDTO {
     return text;
   }
 
-  public Long getUserId() {
-    return userId;
+  public Long getUser() {
+    return user;
   }
 
   public void setId(Long id) {
@@ -35,8 +35,8 @@ public class PostDTO {
     this.text = text;
   }
 
-  public void setUserId(Long userId) {
-    this.userId = userId;
+  public void setUser(Long user) {
+    this.user = user;
   }
 
   public Long getThreadId() {

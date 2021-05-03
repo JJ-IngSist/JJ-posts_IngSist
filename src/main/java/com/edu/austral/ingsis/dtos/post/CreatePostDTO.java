@@ -3,30 +3,30 @@ package com.edu.austral.ingsis.dtos.post;
 public class CreatePostDTO {
 
   private String text;
-  private Long userId;
-  private Long threadId;
+  private Long user;
+  private Long thread;
 
   public String getText() {
     return text;
   }
 
-  public Long getUserId() {
-    return userId;
+  public Long getUser() {
+    return user;
   }
 
   public void setText(String text) {
     this.text = text;
   }
 
-  public void setUserId(Long userId) {
-    this.userId = userId;
+  public void setUser(Long user) {
+    this.user = user;
   }
 
-  public Long getThreadId() {
-    return threadId;
+  public Long getThread() {
+    return thread;
   }
 
-  public void setThreadId(Long threadId) {
-    this.threadId = threadId;
+  public void setThread(Long thread) {
+    this.thread = thread;
   }
 }

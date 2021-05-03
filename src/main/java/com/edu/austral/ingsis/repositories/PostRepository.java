@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends CrudRepository<Post, Long> {
 
-  Optional<Post> findByUserId(Long user_id);
+  Optional<Post> findByUser(Long user_id);
 
   List<Post> findAll();
 

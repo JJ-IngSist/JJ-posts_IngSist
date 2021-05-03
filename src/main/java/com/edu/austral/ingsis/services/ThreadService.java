@@ -24,6 +24,7 @@ public class ThreadService {
 
   public void addPost(Thread thread, Post saved) {
     thread.getPosts().add(saved);
+    if (thread.getPosts().isEmpty()) thread.setFirstPostId(saved.getId());
     save(thread);
   }
 
@@ -41,6 +42,10 @@ public class ThreadService {
 
   public Thread getByPostId(Long id) {
     return threadRepository.getByPostId(id);
+  }
+
+  public void delete(Thread thread) {
+    threadRepository.delete(thread);
   }
 
   public void deletePost(Post post) {
