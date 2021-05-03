@@ -71,7 +71,7 @@ public class PostController {
     return ResponseEntity.ok(setThreadId(objectMapper.map(post, PostDTO.class)));
   }
 
-  @PutMapping("/{id}")
+  @PutMapping("/post/{id}")
   public ResponseEntity<PostDTO> updatePost(@PathVariable Long id,
                                             @RequestBody @Valid UpdatePostDTO updatePostDTO) {
     try {
@@ -82,7 +82,7 @@ public class PostController {
     }
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/post/{id}")
   public ResponseEntity<PostDTO> deletePost(@PathVariable Long id) {
     postService.deletePostWithThread(postService.getById(id));
     return ResponseEntity.noContent().build();

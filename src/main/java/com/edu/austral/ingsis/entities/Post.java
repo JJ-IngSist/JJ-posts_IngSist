@@ -12,7 +12,7 @@ public class Post {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "text", nullable = false)
+  @Column(name = "text", nullable = false, length = 200)
   private String text;
 
   @Column(name = "user_id", nullable = false)
