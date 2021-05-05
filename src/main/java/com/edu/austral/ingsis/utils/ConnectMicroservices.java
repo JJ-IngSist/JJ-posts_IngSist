@@ -26,9 +26,9 @@ public class ConnectMicroservices {
     return "";
   }
 
-  public static String getFromUserMicroservice(String url) {
+  public static String connectToUserMicroservice(String url, HttpMethod method) {
     final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:8080" + url,
-            HttpMethod.GET,
+            method,
             getRequestEntity(),
             String.class);
     return responseEntity.getBody();

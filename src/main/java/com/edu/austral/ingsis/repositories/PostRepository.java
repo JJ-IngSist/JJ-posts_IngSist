@@ -23,4 +23,7 @@ public interface PostRepository extends CrudRepository<Post, Long> {
 
   @Query(value = "select * from posts p order by p.likes desc limit ?1", nativeQuery = true)
   List<Post> getMostLiked(int size);
+
+  @Query(value = "select * from posts p where p.text like %?1%", nativeQuery = true)
+  List<Post> findByRegex(String value);
 }

@@ -64,6 +64,10 @@ public class PostService {
     return postRepository.getMostLiked(size);
   }
 
+  public List<Post> findByRegex(String value) {
+    return postRepository.findByRegex(value);
+  }
+
   public Post update(Long id, Post post) {
     return postRepository
             .findById(id)

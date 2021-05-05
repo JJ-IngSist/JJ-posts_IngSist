@@ -35,7 +35,7 @@ public class PostController {
 
   @PostMapping("/post")
   public ResponseEntity<PostDTO> createPost(@RequestBody @Valid CreatePostDTO createPostDTO) {
-    final String user = getFromUserMicroservice("/user/logged");
+    final String user = connectToUserMicroservice("/user/logged", HttpMethod.GET);
     createPostDTO.setUser(Long.valueOf(getFromJson(user, "id")));
     final Post post = postService.create(objectMapper.map(createPostDTO, Post.class), createPostDTO.getThread());
     return ResponseEntity.ok(setThreadId(setUserDetails(user, objectMapper.map(post, PostDTO.class))));
@@ -44,7 +44,7 @@ public class PostController {
   @GetMapping("/post/{id}")
   public ResponseEntity<PostDTO> getPost(@PathVariable Long id) {
     final Post post = postService.getById(id);
-    final String user = getFromUserMicroservice("/user/" + post.getUser());
+    final String user = connectToUserMicroservice("/user/" + post.getUser(), HttpMethod.GET);
     PostDTO postDTO = setUserDetails(user, objectMapper.map(post, PostDTO.class));
     return ResponseEntity.ok(setThreadId(postDTO));
   }
@@ -54,7 +54,17 @@ public class PostController {
     final List<Post> posts = postService.getAll();
     List<PostDTO> updatedPostDTOS = new ArrayList<>();
     for(PostDTO dto : objectMapper.map(posts, PostDTO.class)) {
-      updatedPostDTOS.add(setThreadId(setUserDetails(getFromUserMicroservice("/user/" + dto.getUser()), dto)));
+      updatedPostDTOS.add(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto)));
+    }
+    return ResponseEntity.ok(updatedPostDTOS);
+  }
+
+  @GetMapping("/search/{value}")
+  public ResponseEntity<List<PostDTO>> getPostsByValue(@PathVariable String value) {
+    final List<Post> posts = postService.findByRegex(value);
+    List<PostDTO> updatedPostDTOS = new ArrayList<>();
+    for(PostDTO dto : objectMapper.map(posts, PostDTO.class)) {
+      updatedPostDTOS.add(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto)));
     }
     return ResponseEntity.ok(updatedPostDTOS);
   }

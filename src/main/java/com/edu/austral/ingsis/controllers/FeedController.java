@@ -6,6 +6,7 @@ import com.edu.austral.ingsis.services.PostService;
 import com.edu.austral.ingsis.services.ThreadService;
 import com.edu.austral.ingsis.utils.ObjectMapper;
 import com.edu.austral.ingsis.utils.ObjectMapperImpl;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.edu.austral.ingsis.utils.ConnectMicroservices.getFromUserMicroservice;
+import static com.edu.austral.ingsis.utils.ConnectMicroservices.connectToUserMicroservice;
 import static com.edu.austral.ingsis.utils.ConnectMicroservices.setUserDetails;
 
 @RestController
@@ -35,7 +36,7 @@ public class FeedController {
     final List<Post> posts = postService.getMostLiked(size);
     List<PostDTO> updatedPostDTOS = new ArrayList<>();
     for(PostDTO dto : objectMapper.map(posts, PostDTO.class)) {
-      updatedPostDTOS.add(setThreadId(setUserDetails(getFromUserMicroservice("/user/" + dto.getUser()), dto)));
+      updatedPostDTOS.add(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto)));
     }
     return ResponseEntity.ok(updatedPostDTOS);
   }
