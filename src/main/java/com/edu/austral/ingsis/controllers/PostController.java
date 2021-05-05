@@ -54,9 +54,15 @@ public class PostController {
     final List<Post> posts = postService.getAll();
     List<PostDTO> updatedPostDTOS = new ArrayList<>();
     for(PostDTO dto : objectMapper.map(posts, PostDTO.class)) {
-      updatedPostDTOS.add(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto)));
+      updatedPostDTOS.add(setLiked(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto))));
     }
     return ResponseEntity.ok(updatedPostDTOS);
+  }
+
+  private PostDTO setLiked(PostDTO postDTO) {
+    final String response = connectToUserMicroservice("/logged/" + postDTO.getId() + "/liked", HttpMethod.GET);
+    postDTO.setLiked(Boolean.parseBoolean(response));
+    return postDTO;
   }
 
   @GetMapping("/search/{value}")
@@ -64,7 +70,7 @@ public class PostController {
     final List<Post> posts = postService.findByRegex(value);
     List<PostDTO> updatedPostDTOS = new ArrayList<>();
     for(PostDTO dto : objectMapper.map(posts, PostDTO.class)) {
-      updatedPostDTOS.add(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto)));
+      updatedPostDTOS.add(setLiked(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto))));
     }
     return ResponseEntity.ok(updatedPostDTOS);
   }

@@ -14,6 +14,7 @@ public class PostDTO {
   private Long threadId;
   private LocalDate date;
   private int likes;
+  private boolean liked;
 
   public Long getId() {
     return id;
@@ -93,5 +94,13 @@ public class PostDTO {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public boolean isLiked() {
+    return liked;
+  }
+
+  public void setLiked(boolean liked) {
+    this.liked = liked;
   }
 }
