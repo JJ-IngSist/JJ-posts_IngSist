@@ -8,9 +8,7 @@ import com.edu.austral.ingsis.utils.ObjectMapper;
 import com.edu.austral.ingsis.utils.ObjectMapperImpl;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +17,7 @@ import static com.edu.austral.ingsis.utils.ConnectMicroservices.connectToUserMic
 import static com.edu.austral.ingsis.utils.ConnectMicroservices.setUserDetails;
 
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT})
 public class FeedController {
 
   private final ObjectMapper objectMapper;
