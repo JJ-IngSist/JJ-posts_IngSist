@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.edu.austral.ingsis.utils.ConnectMicroservices.*;
+import static com.edu.austral.ingsis.utils.SetUtilsToPostDTO.*;
 
 @RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT})
@@ -38,53 +38,37 @@ public class PostController {
     final String user = connectToUserMicroservice("/user/logged", HttpMethod.GET);
     createPostDTO.setUser(Long.valueOf(getFromJson(user, "id")));
     final Post post = postService.create(objectMapper.map(createPostDTO, Post.class), createPostDTO.getThread());
-    return ResponseEntity.ok(setThreadId(setUserDetails(user, objectMapper.map(post, PostDTO.class))));
+    return ResponseEntity.ok(setDetailsToPost(post, threadService));
   }
 
   @GetMapping("/post/{id}")
   public ResponseEntity<PostDTO> getPost(@PathVariable Long id) {
     final Post post = postService.getById(id);
-    final String user = connectToUserMicroservice("/user/" + post.getUser(), HttpMethod.GET);
-    PostDTO postDTO = setUserDetails(user, objectMapper.map(post, PostDTO.class));
-    return ResponseEntity.ok(setThreadId(postDTO));
+    return ResponseEntity.ok(setDetailsToPost(post, threadService));
   }
 
   @GetMapping("/posts")
   public ResponseEntity<List<PostDTO>> getPosts() {
     final List<Post> posts = postService.getAll();
-    List<PostDTO> updatedPostDTOS = new ArrayList<>();
-    for(PostDTO dto : objectMapper.map(posts, PostDTO.class)) {
-      updatedPostDTOS.add(setLiked(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto))));
-    }
-    return ResponseEntity.ok(updatedPostDTOS);
-  }
-
-  private PostDTO setLiked(PostDTO postDTO) {
-    final String response = connectToUserMicroservice("/logged/" + postDTO.getId() + "/liked", HttpMethod.GET);
-    postDTO.setLiked(Boolean.parseBoolean(response));
-    return postDTO;
+    return ResponseEntity.ok(setDetailsToPosts(posts, threadService));
   }
 
   @GetMapping("/search/{value}")
   public ResponseEntity<List<PostDTO>> getPostsByValue(@PathVariable String value) {
     final List<Post> posts = postService.findByRegex(value);
-    List<PostDTO> updatedPostDTOS = new ArrayList<>();
-    for(PostDTO dto : objectMapper.map(posts, PostDTO.class)) {
-      updatedPostDTOS.add(setLiked(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto))));
-    }
-    return ResponseEntity.ok(updatedPostDTOS);
+    return ResponseEntity.ok(setDetailsToPosts(posts, threadService));
   }
 
   @PostMapping("/post/like/{id}")
   public ResponseEntity<PostDTO> likePost(@PathVariable Long id) {
     final Post post = postService.likePost(id);
-    return ResponseEntity.ok(setThreadId(objectMapper.map(post, PostDTO.class)));
+    return ResponseEntity.ok(setThreadId(objectMapper.map(post, PostDTO.class), threadService));
   }
 
   @PostMapping("/post/dislike/{id}")
   public ResponseEntity<PostDTO> dislikePost(@PathVariable Long id) {
     final Post post = postService.dislikePost(id);
-    return ResponseEntity.ok(setThreadId(objectMapper.map(post, PostDTO.class)));
+    return ResponseEntity.ok(setThreadId(objectMapper.map(post, PostDTO.class), threadService));
   }
 
   @PutMapping("/post/{id}")
@@ -92,7 +76,7 @@ public class PostController {
                                             @RequestBody @Valid UpdatePostDTO updatePostDTO) {
     try {
       final Post post = postService.update(id, objectMapper.map(updatePostDTO, Post.class));
-      return ResponseEntity.ok(setThreadId(objectMapper.map(post, PostDTO.class)));
+      return ResponseEntity.ok(setDetailsToPost(post, threadService));
     } catch (NotFoundException e) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The post doesn't exist");
     }
@@ -102,10 +86,5 @@ public class PostController {
   public ResponseEntity<PostDTO> deletePost(@PathVariable Long id) {
     postService.deletePostWithThread(postService.getById(id));
     return ResponseEntity.noContent().build();
-  }
-
-  private PostDTO setThreadId(PostDTO postDTO) {
-    postDTO.setThreadId(threadService.getByPostId(postDTO.getId()).getId());
-    return postDTO;
   }
 }

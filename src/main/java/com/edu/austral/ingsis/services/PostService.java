@@ -60,12 +60,24 @@ public class PostService {
     return save(post);
   }
 
+  public Post getFirstOfThread(Long id) {
+    return getById(threadService.getByPostId(id).getFirstPostId());
+  }
+
   public List<Post> getMostLiked(int size) {
     return postRepository.getMostLiked(size);
   }
 
   public List<Post> findByRegex(String value) {
     return postRepository.findByRegex(value);
+  }
+
+  public List<Post> getPostsOfFollowed(List<Long> longs) {
+    List<Post> posts = new ArrayList<>();
+    for (Long l : longs) {
+      posts.addAll(getPostsOfUser(l));
+    }
+    return posts;
   }
 
   public Post update(Long id, Post post) {
