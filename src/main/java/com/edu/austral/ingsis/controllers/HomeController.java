@@ -40,9 +40,8 @@ public class HomeController {
     final String response = connectToUserMicroservice("/user/followed", HttpMethod.GET);
     final List<Long> longs = getLongs(response);
     final List<Post> posts = postService.getPostsOfFollowed(longs);
-    posts.sort(Comparator.comparing(Post::getDate).reversed());
     final List<HomeDTO> homes = new ArrayList<>();
-    for (Post post : posts) {
+    for (Post post : sortByDate(posts)) {
       final Post first = postService.getFirstOfThread(post.getId());
       final PostDTO firstDTO = setDetailsToPost(first, threadService);
       final PostDTO postDTO = setLiked(setDetailsToPost(post, threadService));
