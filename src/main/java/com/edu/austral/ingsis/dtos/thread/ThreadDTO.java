@@ -1,13 +1,13 @@
 package com.edu.austral.ingsis.dtos.thread;
 
-import com.edu.austral.ingsis.entities.Post;
+import com.edu.austral.ingsis.dtos.post.PostDTO;
 
 import java.util.List;
 
 public class ThreadDTO {
 
   private Long id;
-  private List<Post> posts;
+  private List<PostDTO> posts;
   private Long firstPostId;
 
   public Long getId() {
@@ -18,11 +18,11 @@ public class ThreadDTO {
     this.id = id;
   }
 
-  public List<Post> getPosts() {
+  public List<PostDTO> getPosts() {
     return posts;
   }
 
-  public void setPosts(List<Post> posts) {
+  public void setPosts(List<PostDTO> posts) {
     this.posts = posts;
   }
 

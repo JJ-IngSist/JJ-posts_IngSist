@@ -8,6 +8,9 @@ import com.edu.austral.ingsis.utils.ObjectMapperImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.edu.austral.ingsis.utils.SetUtilsToPostDTO.setDetailsToPost;
+import static java.util.stream.Collectors.toList;
+
 @RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT})
 public class ThreadController {
@@ -18,6 +21,14 @@ public class ThreadController {
   public ThreadController(ThreadService threadService) {
     this.threadService = threadService;
     this.objectMapper = new ObjectMapperImpl();
+  }
+
+  @GetMapping("/thread/{id}")
+  public ResponseEntity<ThreadDTO> getThread(@PathVariable Long id) {
+    final Thread thread = threadService.getById(id);
+    ThreadDTO threadDTO = objectMapper.map(thread, ThreadDTO.class);
+    threadDTO.setPosts(thread.getPosts().stream().map(t -> setDetailsToPost(t, threadService)).collect(toList()));
+    return ResponseEntity.ok(threadDTO);
   }
 
   @GetMapping("/post/{id}/thread")
