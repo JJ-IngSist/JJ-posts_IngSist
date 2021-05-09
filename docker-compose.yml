@@ -1,0 +1,20 @@
+version: '3.7'
+
+networks:
+  network: {}
+
+services:
+  database:
+    container_name: jj-posts
+    image: postgres
+    environment:
+      POSTGRES_DB: 'post'
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'password'
+    ports:
+      - '5433:5432'
+    expose:
+      - '5432'
+    networks:
+      - network
+    restart: always
