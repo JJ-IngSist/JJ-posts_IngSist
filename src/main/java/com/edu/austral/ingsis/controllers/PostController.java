@@ -11,6 +11,7 @@ import com.edu.austral.ingsis.utils.ObjectMapper;
 import com.edu.austral.ingsis.utils.ObjectMapperImpl;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -35,10 +36,14 @@ public class PostController {
 
   @PostMapping("/post")
   public ResponseEntity<PostDTO> createPost(@RequestBody @Valid CreatePostDTO createPostDTO) {
-    final String user = connectToUserMicroservice("/user/logged", HttpMethod.GET);
-    createPostDTO.setUser(Long.valueOf(getFromJson(user, "id")));
-    final Post post = postService.create(objectMapper.map(createPostDTO, Post.class), createPostDTO.getThread());
-    return ResponseEntity.ok(setDetailsToPost(post, threadService));
+    try {
+      final String user = connectToUserMicroservice("/user/logged", HttpMethod.GET);
+      createPostDTO.setUser(Long.valueOf(getFromJson(user, "id")));
+      final Post post = postService.create(objectMapper.map(createPostDTO, Post.class), createPostDTO.getThread());
+      return ResponseEntity.ok(setDetailsToPost(post, threadService));
+    } catch (HttpStatusCodeException e) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
   }
 
   @GetMapping("/post/{id}")

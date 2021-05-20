@@ -5,7 +5,7 @@ networks:
 
 services:
   database:
-    container_name: jj-posts
+    container_name: jj-posts_ingsist
     image: postgres
     environment:
       POSTGRES_DB: 'post'

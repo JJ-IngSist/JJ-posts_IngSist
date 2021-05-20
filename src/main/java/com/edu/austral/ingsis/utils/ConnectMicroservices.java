@@ -36,7 +36,6 @@ public class ConnectMicroservices {
 
   public static PostDTO setUserDetails(String json, PostDTO postDTO) {
     postDTO.setName(getFromJson(json, "name"));
-    postDTO.setLastname(getFromJson(json, "lastname"));
     postDTO.setUsername(getFromJson(json, "username"));
     postDTO.setEmail(getFromJson(json, "email"));
     return postDTO;
