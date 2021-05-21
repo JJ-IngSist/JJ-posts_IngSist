@@ -8,7 +8,6 @@ public class PostDTO {
   private String text;
   private Long user;
   private String name;
-  private String lastname;
   private String username;
   private String email;
   private Long threadId;
@@ -70,14 +69,6 @@ public class PostDTO {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getLastname() {
-    return lastname;
-  }
-
-  public void setLastname(String lastname) {
-    this.lastname = lastname;
   }
 
   public String getUsername() {
