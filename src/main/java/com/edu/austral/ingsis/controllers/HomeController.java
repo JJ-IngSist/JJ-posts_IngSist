@@ -9,10 +9,7 @@ import com.edu.austral.ingsis.utils.ObjectMapper;
 import com.edu.austral.ingsis.utils.ObjectMapperImpl;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,15 +33,15 @@ public class HomeController {
   }
 
   @GetMapping("/home/posts")
-  public ResponseEntity<List<HomeDTO>> getThread() {
-    final String response = connectToUserMicroservice("/user/followed", HttpMethod.GET);
+  public ResponseEntity<List<HomeDTO>> getThread(@RequestHeader(name="Authorization") String token) {
+    final String response = connectToUserMicroservice("/user/followed", HttpMethod.GET, "");
     final List<Long> longs = getLongs(response);
     final List<Post> posts = postService.getPostsOfFollowed(longs);
     final List<HomeDTO> homes = new ArrayList<>();
     for (Post post : sortByDate(posts)) {
       final Post first = postService.getFirstOfThread(post.getId());
-      final PostDTO firstDTO = setDetailsToPost(first, threadService);
-      final PostDTO postDTO = setLiked(setDetailsToPost(post, threadService));
+      final PostDTO firstDTO = setDetailsToPost(first, threadService, token);
+      final PostDTO postDTO = setLiked(setDetailsToPost(post, threadService, token), token);
       homes.add(new HomeDTO(firstDTO, postDTO));
     }
     return ResponseEntity.ok(homes);

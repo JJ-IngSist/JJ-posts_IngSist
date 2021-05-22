@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.edu.austral.ingsis.utils.SetUtilsToPostDTO.*;
@@ -27,14 +26,14 @@ public class FeedController {
   }
 
   @GetMapping("/posts/most-liked")
-  public ResponseEntity<List<HomeDTO>> getMostLikedPosts(@RequestParam(name = "size", defaultValue = "10") int size) {
+  public ResponseEntity<List<HomeDTO>> getMostLikedPosts(@RequestParam(name = "size", defaultValue = "10") int size,
+                                                         @RequestHeader (name="Authorization") String token) {
     final List<Post> posts = postService.getMostLiked(size);
-
     final List<HomeDTO> homes = new ArrayList<>();
     for (Post post : sortByDate(posts)) {
       final Post first = postService.getFirstOfThread(post.getId());
-      final PostDTO firstDTO = setDetailsToPost(first, threadService);
-      final PostDTO postDTO = setLiked(setDetailsToPost(post, threadService));
+      final PostDTO firstDTO = setDetailsToPost(first, threadService, token);
+      final PostDTO postDTO = setLiked(setDetailsToPost(post, threadService, token), token);
       homes.add(new HomeDTO(firstDTO, postDTO));
     }
     return ResponseEntity.ok(homes);

@@ -21,9 +21,11 @@ public class SetUtilsToPostDTO {
     return postDTO;
   }
 
-  public static PostDTO setLiked(PostDTO postDTO) {
-    final String response = connectToUserMicroservice("/logged/" + postDTO.getId() + "/liked", HttpMethod.GET);
-    postDTO.setLiked(Boolean.parseBoolean(response));
+  public static PostDTO setLiked(PostDTO postDTO, String token) {
+    if (!token.isEmpty()) {
+      final String response = connectToUserMicroservice("/logged/" + postDTO.getId() + "/liked", HttpMethod.GET, token);
+      postDTO.setLiked(Boolean.parseBoolean(response));
+    }
     return postDTO;
   }
 
@@ -32,17 +34,17 @@ public class SetUtilsToPostDTO {
     return posts;
   }
 
-  public static List<PostDTO> setDetailsToPosts(List<Post> notSorted, ThreadService service) {
+  public static List<PostDTO> setDetailsToPosts(List<Post> notSorted, ThreadService service, String token) {
     List<Post> posts = sortByDate(notSorted);
     List<PostDTO> updatedPostDTOS = new ArrayList<>();
     for(Post p : posts) {
-      updatedPostDTOS.add(setDetailsToPost(p, service));
+      updatedPostDTOS.add(setDetailsToPost(p, service, token));
     }
     return updatedPostDTOS;
   }
 
-  public static PostDTO setDetailsToPost(Post post, ThreadService service) {
+  public static PostDTO setDetailsToPost(Post post, ThreadService service, String token) {
     PostDTO dto = objectMapper.map(post, PostDTO.class);
-    return setLiked(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET), dto), service));
+    return setLiked(setThreadId(setUserDetails(connectToUserMicroservice("/user/" + dto.getUser(), HttpMethod.GET, ""), dto), service), token);
   }
 }
