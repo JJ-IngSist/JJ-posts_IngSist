@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.edu.austral.ingsis.utils.SetUtilsToPostDTO.setDetailsToPosts;
-import static com.edu.austral.ingsis.utils.SetUtilsToPostDTO.sortByDate;
 
 @RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT})
@@ -29,8 +28,9 @@ public class UserPostController {
   }
 
   @GetMapping("/user/{id}/posts")
-  public ResponseEntity<List<PostDTO>> getPostsOfUser(@PathVariable Long id) {
+  public ResponseEntity<List<PostDTO>> getPostsOfUser(@PathVariable Long id,
+                                                      @RequestHeader (name="Authorization") String token) {
     final List<Post> posts = postService.getPostsOfUser(id);
-    return ResponseEntity.ok(objectMapper.map(setDetailsToPosts(posts, threadService), PostDTO.class));
+    return ResponseEntity.ok(objectMapper.map(setDetailsToPosts(posts, threadService, token), PostDTO.class));
   }
 }

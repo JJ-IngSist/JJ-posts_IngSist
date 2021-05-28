@@ -35,33 +35,36 @@ public class PostController {
   }
 
   @PostMapping("/post")
-  public ResponseEntity<PostDTO> createPost(@RequestBody @Valid CreatePostDTO createPostDTO) {
+  public ResponseEntity<PostDTO> createPost(@RequestBody @Valid CreatePostDTO createPostDTO,
+                                            @RequestHeader (name="Authorization") String token) {
     try {
-      final String user = connectToUserMicroservice("/user/logged", HttpMethod.GET);
+      final String user = connectToUserMicroservice("/user/logged", HttpMethod.GET, token);
       createPostDTO.setUser(Long.valueOf(getFromJson(user, "id")));
       final Post post = postService.create(objectMapper.map(createPostDTO, Post.class), createPostDTO.getThread());
-      return ResponseEntity.ok(setDetailsToPost(post, threadService));
+      return ResponseEntity.ok(setDetailsToPost(post, threadService, token));
     } catch (HttpStatusCodeException e) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
   }
 
   @GetMapping("/post/{id}")
-  public ResponseEntity<PostDTO> getPost(@PathVariable Long id) {
+  public ResponseEntity<PostDTO> getPost(@PathVariable Long id,
+                                         @RequestHeader (name="Authorization") String token) {
     final Post post = postService.getById(id);
-    return ResponseEntity.ok(setDetailsToPost(post, threadService));
+    return ResponseEntity.ok(setDetailsToPost(post, threadService, token));
   }
 
   @GetMapping("/posts")
-  public ResponseEntity<List<PostDTO>> getPosts() {
+  public ResponseEntity<List<PostDTO>> getPosts(@RequestHeader (name="Authorization") String token) {
     final List<Post> posts = postService.getAll();
-    return ResponseEntity.ok(setDetailsToPosts(posts, threadService));
+    return ResponseEntity.ok(setDetailsToPosts(posts, threadService, token));
   }
 
   @GetMapping("/search/{value}")
-  public ResponseEntity<List<PostDTO>> getPostsByValue(@PathVariable String value) {
+  public ResponseEntity<List<PostDTO>> getPostsByValue(@PathVariable String value,
+                                                       @RequestHeader (name="Authorization") String token) {
     final List<Post> posts = postService.findByRegex(value);
-    return ResponseEntity.ok(setDetailsToPosts(posts, threadService));
+    return ResponseEntity.ok(setDetailsToPosts(posts, threadService, token));
   }
 
   @PostMapping("/post/like/{id}")
@@ -78,10 +81,11 @@ public class PostController {
 
   @PutMapping("/post/{id}")
   public ResponseEntity<PostDTO> updatePost(@PathVariable Long id,
-                                            @RequestBody @Valid UpdatePostDTO updatePostDTO) {
+                                            @RequestBody @Valid UpdatePostDTO updatePostDTO,
+                                            @RequestHeader (name="Authorization") String token) {
     try {
       final Post post = postService.update(id, objectMapper.map(updatePostDTO, Post.class));
-      return ResponseEntity.ok(setDetailsToPost(post, threadService));
+      return ResponseEntity.ok(setDetailsToPost(post, threadService, token));
     } catch (NotFoundException e) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The post doesn't exist");
     }

@@ -24,10 +24,11 @@ public class ThreadController {
   }
 
   @GetMapping("/thread/{id}")
-  public ResponseEntity<ThreadDTO> getThread(@PathVariable Long id) {
+  public ResponseEntity<ThreadDTO> getThread(@PathVariable Long id,
+                                             @RequestHeader (name="Authorization") String token) {
     final Thread thread = threadService.getById(id);
     ThreadDTO threadDTO = objectMapper.map(thread, ThreadDTO.class);
-    threadDTO.setPosts(thread.getPosts().stream().map(t -> setDetailsToPost(t, threadService)).collect(toList()));
+    threadDTO.setPosts(thread.getPosts().stream().map(t -> setDetailsToPost(t, threadService, token)).collect(toList()));
     return ResponseEntity.ok(threadDTO);
   }
 
