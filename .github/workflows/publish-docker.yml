@@ -25,9 +25,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/jj-infra:${{ github.ref }}
+          tags: rocioferreiro/jj-infra-post:${{ github.ref }}
       - name: Build container image
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: docker.pkg.github.com/${{ github.repository }}/my-image:${{ github.ref }}
+          tags: docker.pkg.github.com/${{ github.repository }}/latest:${{ github.ref }}
