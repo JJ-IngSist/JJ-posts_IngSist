@@ -1,7 +1,9 @@
 name: Publish Docker image
+
 on:
   push:
-    branches: [ main ]
+    branches: [ staging ]
+    
 jobs:
   push_to_registries:
     name: Push Docker image to multiple registries
@@ -27,9 +29,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: rocioferreiro/jj-infra-post
+          tags: rocioferreiro/jj-infra-post-staging
       - name: Build container image
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: docker.pkg.github.com/${{ github.repository }}/post-image:latest
+          tags: docker.pkg.github.com/${{ github.repository }}/post-staging-image:latest

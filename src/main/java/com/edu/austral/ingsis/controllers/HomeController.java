@@ -23,13 +23,11 @@ import static com.edu.austral.ingsis.utils.SetUtilsToPostDTO.*;
 public class HomeController {
 
   private final PostService postService;
-  private final ObjectMapper objectMapper;
   private final ThreadService threadService;
 
   public HomeController(PostService postService, ThreadService threadService) {
     this.postService = postService;
     this.threadService = threadService;
-    this.objectMapper = new ObjectMapperImpl();
   }
 
   @GetMapping("/home/posts")
