@@ -34,7 +34,7 @@ public class HomeController {
 
   @GetMapping("/home/posts")
   public ResponseEntity<List<HomeDTO>> getThread(@RequestHeader(name="Authorization") String token) {
-    final String response = connectToUserMicroservice("/user/followed", HttpMethod.GET, "");
+    final String response = connectToUserMicroservice("/user/followed", HttpMethod.GET, token);
     final List<Long> longs = getLongs(response);
     final List<Post> posts = postService.getPostsOfFollowed(longs);
     final List<HomeDTO> homes = new ArrayList<>();
@@ -48,7 +48,8 @@ public class HomeController {
   }
 
   private List<Long> getLongs(String json) {
-    String[] jsons = json.split("},\\{");
+
+    String[] jsons = json.substring(1, json.length()-1).split("},\\{");
     List<Long> longs = new ArrayList<>();
     for (String s: clean(jsons)) {
       longs.add(getId(s));
