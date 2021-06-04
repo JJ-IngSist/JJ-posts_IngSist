@@ -13,7 +13,7 @@ public class Thread {
   @Column(name = "id")
   private Long id;
 
-  @OneToMany
+  @OneToMany(fetch = FetchType.EAGER)
   private List<Post> posts = new ArrayList<>();
 
   @Column(name = "first_id")

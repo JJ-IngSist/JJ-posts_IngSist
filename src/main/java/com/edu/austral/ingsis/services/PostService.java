@@ -94,20 +94,15 @@ public class PostService {
   public void deletePostWithThread(Post post) {
     Thread thread = threadService.getByPostId(post.getId());
     if(post.getId().equals(thread.getFirstPostId())) {
-      List<Post> posts;
-      posts = thread.getPosts();
+      List<Post> posts = thread.getPosts();
       thread.setPosts(new ArrayList<>());
       threadService.save(thread);
-      deleteAllPosts(posts);
+      for(Post p: posts) {
+        postRepository.delete(getById(p.getId()));
+      }
       threadService.delete(threadService.getById(thread.getId()));
     } else {
       threadService.deletePost(post);
-      postRepository.delete(getById(post.getId()));
-    }
-  }
-
-  private void deleteAllPosts(List<Post> posts) {
-    for(Post post: posts) {
       postRepository.delete(getById(post.getId()));
     }
   }

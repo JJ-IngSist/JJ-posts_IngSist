@@ -22,10 +22,8 @@ public class SetUtilsToPostDTO {
   }
 
   public static PostDTO setLiked(PostDTO postDTO, String token) {
-    if (!token.isEmpty()) {
-      final String response = connectToUserMicroservice("/logged/" + postDTO.getId() + "/liked", HttpMethod.GET, token);
-      postDTO.setLiked(Boolean.parseBoolean(response));
-    }
+    final String response = connectToUserMicroservice("/logged/" + postDTO.getId() + "/liked", HttpMethod.GET, token);
+    postDTO.setLiked(Boolean.parseBoolean(response));
     return postDTO;
   }
 

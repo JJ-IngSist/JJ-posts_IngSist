@@ -5,14 +5,11 @@ import com.edu.austral.ingsis.dtos.post.PostDTO;
 import com.edu.austral.ingsis.entities.Post;
 import com.edu.austral.ingsis.services.PostService;
 import com.edu.austral.ingsis.services.ThreadService;
-import com.edu.austral.ingsis.utils.ObjectMapper;
-import com.edu.austral.ingsis.utils.ObjectMapperImpl;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.edu.austral.ingsis.utils.ConnectMicroservices.*;
