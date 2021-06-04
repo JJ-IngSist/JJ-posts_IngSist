@@ -37,4 +37,9 @@ public class ThreadController {
     final Thread thread = threadService.getByPostId(id);
     return ResponseEntity.ok(objectMapper.map(thread, ThreadDTO.class));
   }
+
+  @GetMapping("/post/{id}/amount-thread")
+  public int getAmountOfPostsInThread(@PathVariable Long id) {
+    return threadService.getByPostId(id).getPosts().size();
+  }
 }

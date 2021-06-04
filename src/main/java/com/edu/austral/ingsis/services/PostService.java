@@ -7,6 +7,7 @@ import com.edu.austral.ingsis.utils.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class PostService {
   }
 
   public Post create(Post post, Long threadId) {
-    post.setDate(LocalDate.now());
+    post.setDate(LocalDateTime.now());
     post.setLikes(0);
     Post saved = postRepository.save(post);
     Thread thread;
