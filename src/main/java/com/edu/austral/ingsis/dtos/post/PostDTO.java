@@ -14,6 +14,7 @@ public class PostDTO {
   private LocalDateTime date;
   private int likes;
   private boolean liked;
+  private boolean isFirst;
 
   public Long getId() {
     return id;
@@ -93,5 +94,13 @@ public class PostDTO {
 
   public void setLiked(boolean liked) {
     this.liked = liked;
+  }
+
+  public boolean isFirst() {
+    return isFirst;
+  }
+
+  public void setFirst(boolean first) {
+    isFirst = first;
   }
 }
