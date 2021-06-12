@@ -1,6 +1,6 @@
 package com.edu.austral.ingsis.dtos.post;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PostDTO {
 
@@ -11,9 +11,10 @@ public class PostDTO {
   private String username;
   private String email;
   private Long threadId;
-  private LocalDate date;
+  private LocalDateTime date;
   private int likes;
   private boolean liked;
+  private boolean isFirst;
 
   public Long getId() {
     return id;
@@ -47,11 +48,11 @@ public class PostDTO {
     this.threadId = threadId;
   }
 
-  public LocalDate getDate() {
+  public LocalDateTime getDate() {
     return date;
   }
 
-  public void setDate(LocalDate date) {
+  public void setDate(LocalDateTime date) {
     this.date = date;
   }
 
@@ -93,5 +94,13 @@ public class PostDTO {
 
   public void setLiked(boolean liked) {
     this.liked = liked;
+  }
+
+  public boolean isFirst() {
+    return isFirst;
+  }
+
+  public void setFirst(boolean first) {
+    isFirst = first;
   }
 }

@@ -5,14 +5,11 @@ import com.edu.austral.ingsis.dtos.post.PostDTO;
 import com.edu.austral.ingsis.entities.Post;
 import com.edu.austral.ingsis.services.PostService;
 import com.edu.austral.ingsis.services.ThreadService;
-import com.edu.austral.ingsis.utils.ObjectMapper;
-import com.edu.austral.ingsis.utils.ObjectMapperImpl;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.edu.austral.ingsis.utils.ConnectMicroservices.*;
@@ -23,18 +20,16 @@ import static com.edu.austral.ingsis.utils.SetUtilsToPostDTO.*;
 public class HomeController {
 
   private final PostService postService;
-  private final ObjectMapper objectMapper;
   private final ThreadService threadService;
 
   public HomeController(PostService postService, ThreadService threadService) {
     this.postService = postService;
     this.threadService = threadService;
-    this.objectMapper = new ObjectMapperImpl();
   }
 
   @GetMapping("/home/posts")
   public ResponseEntity<List<HomeDTO>> getThread(@RequestHeader(name="Authorization") String token) {
-    final String response = connectToUserMicroservice("/user/followed", HttpMethod.GET, "");
+    final String response = connectToUserMicroservice("/user/followed", HttpMethod.GET, token);
     final List<Long> longs = getLongs(response);
     final List<Post> posts = postService.getPostsOfFollowed(longs);
     final List<HomeDTO> homes = new ArrayList<>();
@@ -48,7 +43,8 @@ public class HomeController {
   }
 
   private List<Long> getLongs(String json) {
-    String[] jsons = json.split("},\\{");
+
+    String[] jsons = json.substring(1, json.length()-1).split("},\\{");
     List<Long> longs = new ArrayList<>();
     for (String s: clean(jsons)) {
       longs.add(getId(s));
