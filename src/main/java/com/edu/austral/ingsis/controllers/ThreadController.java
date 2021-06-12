@@ -1,7 +1,10 @@
 package com.edu.austral.ingsis.controllers;
 
+import com.edu.austral.ingsis.dtos.post.PostDTO;
 import com.edu.austral.ingsis.dtos.thread.ThreadDTO;
+import com.edu.austral.ingsis.entities.Post;
 import com.edu.austral.ingsis.entities.Thread;
+import com.edu.austral.ingsis.services.PostService;
 import com.edu.austral.ingsis.services.ThreadService;
 import com.edu.austral.ingsis.utils.ObjectMapper;
 import com.edu.austral.ingsis.utils.ObjectMapperImpl;
@@ -17,10 +20,12 @@ public class ThreadController {
 
   private final ThreadService threadService;
   private final ObjectMapper objectMapper;
+  private final PostService postService;
 
-  public ThreadController(ThreadService threadService) {
+  public ThreadController(ThreadService threadService, PostService postService) {
     this.threadService = threadService;
-    this.objectMapper = new ObjectMapperImpl();
+    objectMapper = new ObjectMapperImpl();
+    this.postService = postService;
   }
 
   @GetMapping("/thread/{id}")
@@ -28,7 +33,9 @@ public class ThreadController {
                                              @RequestHeader (name="Authorization") String token) {
     final Thread thread = threadService.getById(id);
     ThreadDTO threadDTO = objectMapper.map(thread, ThreadDTO.class);
-    threadDTO.setPosts(thread.getPosts().stream().map(t -> setDetailsToPost(t, threadService, token)).collect(toList()));
+    threadDTO.setPosts(objectMapper.map(thread.getPosts().stream().filter(p -> !p.getId().equals(thread.getFirstPostId())).collect(toList()), PostDTO.class));
+    threadDTO.setPosts(threadDTO.getPosts().stream().map(t -> setDetailsToPost(objectMapper.map(t, Post.class), threadService, token)).collect(toList()));
+    threadDTO.setFirstPost(setDetailsToPost(postService.getById(thread.getFirstPostId()), threadService, token));
     return ResponseEntity.ok(threadDTO);
   }
 
@@ -36,5 +43,17 @@ public class ThreadController {
   public ResponseEntity<ThreadDTO> getThreadOfPost(@PathVariable Long id) {
     final Thread thread = threadService.getByPostId(id);
     return ResponseEntity.ok(objectMapper.map(thread, ThreadDTO.class));
+  }
+
+  @GetMapping("/post/{id}/amount-thread")
+  public int getAmountOfPostsInThread(@PathVariable String id) {
+    return threadService.getByPostId(Long.parseLong(id)).getPosts().size();
+  }
+
+  @GetMapping("/thread/first/{id}")
+  public ResponseEntity<PostDTO> getFirstPostOfThread(@PathVariable String id,
+                                                      @RequestHeader (name="Authorization") String token) {
+    Post post = postService.getById(threadService.getById(Long.parseLong(id)).getFirstPostId());
+    return ResponseEntity.ok(objectMapper.map(setDetailsToPost(post, threadService, token), PostDTO.class));
   }
 }
