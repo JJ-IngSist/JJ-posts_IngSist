@@ -94,6 +94,7 @@ public class PostController {
   @DeleteMapping("/post/{id}")
   public ResponseEntity<PostDTO> deletePost(@PathVariable Long id,
                                             @RequestHeader (name="Authorization") String token) {
+    connectToUserMicroservice("/post/delete/" + id, HttpMethod.PUT, token);
     postService.deletePostWithThread(postService.getById(id));
     return ResponseEntity.noContent().build();
   }
