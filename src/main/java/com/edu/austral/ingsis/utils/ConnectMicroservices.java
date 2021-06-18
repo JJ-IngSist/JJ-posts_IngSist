@@ -3,10 +3,14 @@ package com.edu.austral.ingsis.utils;
 import com.edu.austral.ingsis.dtos.post.PostDTO;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 public class ConnectMicroservices {
+
+  @Value("${user_url}")
+  private static String userUrl;
 
   private final static RestTemplate restTemplate = new RestTemplate();
 
@@ -29,7 +33,9 @@ public class ConnectMicroservices {
   }
 
   public static String connectToUserMicroservice(String url, HttpMethod method, String token) {
-    final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:8080" + url,
+
+
+    final ResponseEntity<String> responseEntity = restTemplate.exchange(userUrl + url,
             method,
             getRequestEntity(token),
             String.class);
