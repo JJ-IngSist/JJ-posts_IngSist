@@ -35,7 +35,7 @@ public class ConnectMicroservices {
   public static String connectToUserMicroservice(String url, HttpMethod method, String token) {
 
     System.out.println(userUrl);
-    final ResponseEntity<String> responseEntity = restTemplate.exchange(userUrl + url,
+    final ResponseEntity<String> responseEntity = restTemplate.exchange("https://jibberjabber.hopto.org/api/user" + url,
             method,
             getRequestEntity(token),
             String.class);
