@@ -3,14 +3,12 @@ package com.edu.austral.ingsis.utils;
 import com.edu.austral.ingsis.dtos.post.PostDTO;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 public class ConnectMicroservices {
 
-  @Value("${microservice.user.baseurl}")
-  private static String userUrl;
+  private static String userUrl = "http://api-user:8080";
 
   private final static RestTemplate restTemplate = new RestTemplate();
 
