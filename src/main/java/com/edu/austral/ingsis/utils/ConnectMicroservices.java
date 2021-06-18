@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 public class ConnectMicroservices {
 
-  @Value("${user_url}")
+  @Value("${microservice.user.base-url}")
   private static String userUrl;
 
   private final static RestTemplate restTemplate = new RestTemplate();
