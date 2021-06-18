@@ -66,7 +66,7 @@ jobs:
       - name: Deploy
         uses: fifsky/ssh-action@master
         with:
-          command: ./jj-infra/scripts/restart.sh
+          command: ./jj-infra/scripts/restart-dev.sh
           host: ${{ env.VM_IP }}
           user: ${{ env.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
