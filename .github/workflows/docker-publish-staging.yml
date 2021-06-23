@@ -64,8 +64,8 @@ jobs:
       - name: Set Production Env variables if prod is target
         run: echo "VM_IP=$DEV_IP" >> $GITHUB_ENV && echo "VM_USER=$DEV_USER" >> $GITHUB_ENV
         env: 
-          PROD_IP: ${{ secrets.DEV_IP }}
-          PROD_USER: ${{ secrets.DEV_USER }}
+          DEV_IP: ${{ secrets.DEV_IP }}
+          DEV_USER: ${{ secrets.DEV_USER }}
       - name: Deploy
         uses: fifsky/ssh-action@master
         with:
