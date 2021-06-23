@@ -23,8 +23,9 @@ public class ThreadService {
   }
 
   public void addPost(Thread thread, Post saved) {
+    if (thread.getPosts().isEmpty())
+      thread.setFirstPostId(saved.getId());
     thread.getPosts().add(saved);
-    if (thread.getPosts().isEmpty()) thread.setFirstPostId(saved.getId());
     save(thread);
   }
 

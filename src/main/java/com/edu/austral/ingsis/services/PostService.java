@@ -7,6 +7,7 @@ import com.edu.austral.ingsis.utils.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class PostService {
   }
 
   public Post create(Post post, Long threadId) {
-    post.setDate(LocalDate.now());
+    post.setDate(LocalDateTime.now());
     post.setLikes(0);
     Post saved = postRepository.save(post);
     Thread thread;
@@ -94,18 +95,15 @@ public class PostService {
   public void deletePostWithThread(Post post) {
     Thread thread = threadService.getByPostId(post.getId());
     if(post.getId().equals(thread.getFirstPostId())) {
+      List<Post> posts = thread.getPosts();
       thread.setPosts(new ArrayList<>());
       threadService.save(thread);
-      deleteAllPosts(thread);
-      threadService.delete(thread);
+      for(Post p: posts) {
+        postRepository.delete(getById(p.getId()));
+      }
+      threadService.delete(threadService.getById(thread.getId()));
     } else {
       threadService.deletePost(post);
-      postRepository.delete(getById(post.getId()));
-    }
-  }
-
-  private void deleteAllPosts(Thread thread) {
-    for(Post post: thread.getPosts()) {
       postRepository.delete(getById(post.getId()));
     }
   }
