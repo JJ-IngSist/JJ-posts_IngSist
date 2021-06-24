@@ -25,6 +25,7 @@ jobs:
   push_to_registries:
     needs: build
     name: Push Docker image to multiple registries
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -58,11 +59,7 @@ jobs:
     needs: push_to_registries
     runs-on: ubuntu-latest
     steps:
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-      - name: Set Production Env variables if prod is target
+      - name: Set Production Env variables 
         run: echo "VM_IP=$DEV_IP" >> $GITHUB_ENV && echo "VM_USER=$DEV_USER" >> $GITHUB_ENV
         env: 
           DEV_IP: ${{ secrets.DEV_IP }}
