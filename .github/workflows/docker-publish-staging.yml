@@ -25,7 +25,6 @@ jobs:
   push_to_registries:
     needs: build
     name: Push Docker image to multiple registries
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       packages: write
