@@ -22,6 +22,7 @@ jobs:
       
   push_to_registries:
     name: Push Docker image to multiple registries
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -67,7 +68,7 @@ jobs:
       - name: Deploy
         uses: fifsky/ssh-action@master
         with:
-          command: ./scripts/restart.sh
+          command: ./jj-infra/scripts/restart.sh
           host: ${{ env.VM_IP }}
           user: ${{ env.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
