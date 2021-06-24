@@ -23,8 +23,8 @@ jobs:
       run: ./gradlew build
       
   push_to_registries:
-    name: Push Docker image to multiple registries
     needs: build
+    name: Push Docker image to multiple registries
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -61,8 +61,8 @@ jobs:
       - name: Set Production Env variables 
         run: echo "VM_IP=$DEV_IP" >> $GITHUB_ENV && echo "VM_USER=$DEV_USER" >> $GITHUB_ENV
         env: 
-          PROD_IP: ${{ secrets.DEV_IP }}
-          PROD_USER: ${{ secrets.DEV_USER }}
+          DEV_IP: ${{ secrets.DEV_IP }}
+          DEV_USER: ${{ secrets.DEV_USER }}
       - name: Deploy
         uses: fifsky/ssh-action@master
         with:
