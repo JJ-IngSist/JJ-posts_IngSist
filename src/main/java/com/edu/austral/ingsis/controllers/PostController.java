@@ -96,6 +96,6 @@ public class PostController {
                                             @RequestHeader (name="Authorization") String token) {
     connectToUserMicroservice("/post/delete/" + id, HttpMethod.PUT, token);
     postService.deletePostWithThread(postService.getById(id));
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(new PostDTO());
   }
 }
