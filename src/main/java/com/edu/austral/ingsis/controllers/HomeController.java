@@ -43,8 +43,8 @@ public class HomeController {
   }
 
   private List<Long> getLongs(String json) {
-
-    String[] jsons = json.substring(1, json.length()-1).split("},\\{");
+    String sub = json.substring(1, json.length()-1);
+    String[] jsons = sub.split("},\\{");
     List<Long> longs = new ArrayList<>();
     for (String s: clean(jsons)) {
       longs.add(getId(s));
