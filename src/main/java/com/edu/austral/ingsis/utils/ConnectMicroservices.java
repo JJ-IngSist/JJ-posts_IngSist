@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 public class ConnectMicroservices {
 
-  private static String userUrl = "http://localhost:8080";
+  private static String userUrl = "http://api-user:8080";
 
   private final static RestTemplate restTemplate = new RestTemplate();
 
@@ -31,8 +31,6 @@ public class ConnectMicroservices {
   }
 
   public static String connectToUserMicroservice(String url, HttpMethod method, String token) {
-
-    System.out.println(userUrl);
     final ResponseEntity<String> responseEntity = restTemplate.exchange(userUrl + url,
             method,
             getRequestEntity(token),
